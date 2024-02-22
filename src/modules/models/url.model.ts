@@ -1,46 +1,29 @@
-// models/url.model.ts
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../../sequelize';  // Importa la instancia de Sequelize
-import User from './user.model'; // Importa el modelo de usuario
+import { DataTypes } from "sequelize";
+import sequelize from "../../database";
 
-class Url extends Model {}
-Url.init(
-  {
-    urlId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      field: 'url_id',
-    },
-    originalUrl: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    shortUrl: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    clicks: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: 'user_id',
-      },
-    },
+const Url = sequelize.define("urls", {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
   },
-  {
-    sequelize, // Conecta el modelo con la instancia de Sequelize
-    modelName: 'Url', // Nombre del modelo
-  }
-);
-
-Url.belongsTo(User, { foreignKey: 'userId' });
+  original_url: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  short_url: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  creation_date: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  deletion_date: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+});
 
 export default Url;
-

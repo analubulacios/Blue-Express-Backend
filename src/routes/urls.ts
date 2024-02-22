@@ -1,13 +1,13 @@
-import express from 'express';
-import { originalUrlController, shortenUrlController } from '../modules/controllers/url.controller';
+import express from "express";
+import urlController from "../modules/controllers/url.controller";
 
 
 const router = express.Router();
 
-// Generación de URL Corta
-router.post('/shorten', shortenUrlController);
+router.post("/shorten", urlController.shortenUrl);
 
-// Recuperación de URL Original
-router.get('/original/:shortUrl', originalUrlController);
+// router.get("/:short_url", urlController.redirectToOriginalUrl);
+
+router.delete("/:id", urlController.deleteUrl);
 
 export default router;

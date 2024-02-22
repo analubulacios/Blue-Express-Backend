@@ -1,6 +1,6 @@
 import express from 'express';
 import urlRouter from './routes/urls';
-import sequelize from './sequelize'; 
+import sequelize from './database';
 // import Url from './modules/models/url.model';// Importa el modelo Url
 // import User from './modules/models/user.model'; // Importa el modelo User
 

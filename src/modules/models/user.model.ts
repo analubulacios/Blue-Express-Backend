@@ -1,6 +1,6 @@
 // models/user.model.ts
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../../sequelize'; // Importa la instancia de Sequelize
+import sequelize from '../../database';// Importa la instancia de Sequelize
 import Url from './url.model';
 
 class User extends Model {}
@@ -17,6 +17,7 @@ User.init(
       allowNull: false,
       unique: true, // El correo electrónico debe ser único
     },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,

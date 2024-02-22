@@ -1,11 +1,38 @@
-export const generateShortUrl = (originalUrl: string): string => {
-    // Utilizar originalUrl en la lógica de alguna manera
-    const shortUrl = 'https://bu.ex/' + originalUrl.length; // Ejemplo simple, podrías usar cualquier otra lógica
-    return shortUrl;
-};
+import { generateRandomString } from "../../utils.ts/urlGenerator";
+import { CreateUrlsDto } from "../dtos/urls.dto";
+import Url from "../models/url.model";
 
-export const retrieveOriginalUrl = (shortUrl: string): string | null => {
-    // Utilizar shortUrl en la lógica de alguna manera
-    const originalUrl = 'https://example.com/' + shortUrl.substring(0, 5); // Ejemplo simple, podrías usar cualquier otra lógica
-    return originalUrl;
-};
+class UrlService {
+    async createShortUrl(body: CreateUrlsDto) {
+      try {
+        const shortUrl = `https://bu.ex/${generateRandomString()}`;
+
+        const createdUrl = await Url.create({
+          original_url: body.original_url,
+          short_url: shortUrl,
+        });
+  
+        return createdUrl;
+      } catch (error) {
+        throw new Error("No se pudo crear la URL");
+      }
+    }
+  
+    // async findUrlByShortUrl(dto: GetShortenUrlDto) {
+    //   try {
+    //     const urls = await Url.findAll();
+  
+    //     return urls;
+    //   } catch (error) {
+    //     throw new Error("No se pudo obtener las URLS");
+    //   }
+    // }
+  
+    async deleteUrlById(id: any) {
+      return await Url.destroy({
+        where: { id },
+      });
+    }
+  }
+  
+  export default new UrlService();

@@ -4,9 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const url_controller_1 = __importDefault(require("../modules/controllers/url.controller"));
+const urls_1 = __importDefault(require("./urls"));
 const router = express_1.default.Router();
-router.post("/shorten", url_controller_1.default.shortenUrl);
-// router.get("/:short_url", urlController.redirectToOriginalUrl);
-router.delete("/:id", url_controller_1.default.deleteUrl);
+router.use("/urls", urls_1.default);
 exports.default = router;
