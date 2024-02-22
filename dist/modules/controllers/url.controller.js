@@ -33,7 +33,7 @@ class UrlController {
     // async redirectToOriginalUrl(req: any, res: any) {
     //   try {
     //     console.log("Veamos que es lo que llega, req.params");
-    //     const url = await urlsService.findUrlByShortUrl(req.params);
+    //     const url = await urlService.findUrlByShortUrl(req.params);
     //     if (!url) {
     //       return res.status(404).json({ error: "URL corta no encontrada" });
     //     }

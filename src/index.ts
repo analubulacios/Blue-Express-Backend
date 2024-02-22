@@ -1,36 +1,40 @@
-import express from 'express';
-import urlRouter from './routes/urls';
-import sequelize from './database';
-// import Url from './modules/models/url.model';// Importa el modelo Url
-// import User from './modules/models/user.model'; // Importa el modelo User
+import express from "express";
+import sequelize from "./database";
+import Routes from "./routes/index";
 
-const app = express()
-
-app.use(express.json())
-
-const PORT = 5003
-
-app.get("/ping", (_req, res) => {
-    console.log("Veamos si llega algo");
-    res.send("pong");
+const app = express();
+app.use((req, res, next) => {
+  let data = "";
+  req.on("data", (chunk) => {
+    data += chunk.toString();
   });
 
-app.use('/api', urlRouter);
+  req.on("end", () => {
+    try {
+      req.body = JSON.parse(data);
+      next();
+    } catch (error) {
+      res.status(400).json({ error: "Invalid JSON in request body" });
+    }
+  });
+});
 
-// Conecta con la base de datos utilizando Sequelize
-sequelize.authenticate()
-    .then(() => {
-        console.log('Conexión a la base de datos establecida correctamente.');
-        return sequelize.sync({ force: true }); // Sincroniza los modelos con la base de datos
-    })
-    .then(() => {
-        console.log('Tablas creadas exitosamente.');
-    })
-    .catch((err) => {
-        console.error('Error al conectar con la base de datos:', err);
+const PORT = 5004;
+
+async function main() {
+  try {
+    await sequelize.authenticate();
+
+    await sequelize.sync({ force: false });
+
+    app.use("/", Routes);
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
     });
+  } catch (error) {
+    console.error("No se pudo conectar con el servidor");
+  }
+}
 
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+main();
