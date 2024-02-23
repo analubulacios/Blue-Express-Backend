@@ -28,7 +28,6 @@ const Url = sequelize.define("urls", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-
 });
 
 export default Url;
