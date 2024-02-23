@@ -2,6 +2,9 @@ import express from "express";
 import sequelize from "./database";
 import Routes from "./routes/index";
 import cors from "cors";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 app.use(cors()); 
@@ -26,7 +29,7 @@ app.use((req, res, next) => {
     }
   });
 
-const PORT = 5004;
+const PORT = process.env.PORT || ""; 
 
 async function main() {
   try {

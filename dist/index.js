@@ -16,6 +16,8 @@ const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./database"));
 const index_1 = __importDefault(require("./routes/index"));
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use((req, res, next) => {
@@ -38,7 +40,7 @@ app.use((req, res, next) => {
         next();
     }
 });
-const PORT = 5004;
+const PORT = process.env.PORT;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -6,7 +6,7 @@ import Url from "../models/url.model";
 class UrlService {
   async createShortUrl(body: CreateUrlsDto) {
     try {
-      const shortUrl = `https://short.url/${generateRandomString()}`;
+      const shortUrl = await generateRandomString();
 
       const createdUrl = await Url.create({
         original_url: body.original_url,
