@@ -1,23 +1,30 @@
 import express from "express";
 import sequelize from "./database";
 import Routes from "./routes/index";
+import cors from "cors";
 
 const app = express();
-app.use((req, res, next) => {
-  let data = "";
-  req.on("data", (chunk) => {
-    data += chunk.toString();
-  });
+app.use(cors()); 
 
-  req.on("end", () => {
-    try {
-      req.body = JSON.parse(data);
+app.use((req, res, next) => {
+    if (req.method === "POST" || req.method === "DELETE") {
+      let data = "";
+      req.on("data", (chunk) => {
+        data += chunk.toString();
+      });
+  
+      req.on("end", () => {
+        try {
+          req.body = JSON.parse(data);
+          next();
+        } catch (error) {
+          res.status(400).json({ error: "Invalid JSON in request body" });
+        }
+      });
+    } else {
       next();
-    } catch (error) {
-      res.status(400).json({ error: "Invalid JSON in request body" });
     }
   });
-});
 
 const PORT = 5004;
 

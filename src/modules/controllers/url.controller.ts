@@ -1,6 +1,5 @@
 import urlService from "../services/url.service";
 
-
 class UrlController {
   async shortenUrl(req: any, res: any) {
     try {

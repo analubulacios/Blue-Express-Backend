@@ -15,21 +15,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./database"));
 const index_1 = __importDefault(require("./routes/index"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
 app.use((req, res, next) => {
-    let data = "";
-    req.on("data", (chunk) => {
-        data += chunk.toString();
-    });
-    req.on("end", () => {
-        try {
-            req.body = JSON.parse(data);
-            next();
-        }
-        catch (error) {
-            res.status(400).json({ error: "Invalid JSON in request body" });
-        }
-    });
+    if (req.method === "POST" || req.method === "DELETE") {
+        let data = "";
+        req.on("data", (chunk) => {
+            data += chunk.toString();
+        });
+        req.on("end", () => {
+            try {
+                req.body = JSON.parse(data);
+                next();
+            }
+            catch (error) {
+                res.status(400).json({ error: "Invalid JSON in request body" });
+            }
+        });
+    }
+    else {
+        next();
+    }
 });
 const PORT = 5004;
 function main() {

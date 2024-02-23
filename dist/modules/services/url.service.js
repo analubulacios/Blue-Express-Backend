@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,49 +12,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const urlGenerator_1 = require("../../utils.ts/urlGenerator");
 const url_model_1 = __importDefault(require("../models/url.model"));
 class UrlService {
     createShortUrl(body) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const nanoidModule = yield Promise.resolve().then(() => __importStar(require('nanoid')));
-                const { nanoid } = nanoidModule.default;
-                console.log("Nanoid module imported successfully!");
-                const shortUrl = `https://bu.ex/${nanoid(8)}`;
-                console.log("Generated short URL:", shortUrl);
+                const shortUrl = `https://short.url/${(0, urlGenerator_1.generateRandomString)()}`;
                 const createdUrl = yield url_model_1.default.create({
                     original_url: body.original_url,
                     short_url: shortUrl,
                 });
-                console.log("URL created successfully:", createdUrl);
                 return createdUrl;
             }
             catch (error) {
-                console.error("Error creating short URL:", error);
                 throw new Error("No se pudo crear la URL");
             }
         });
     }
-    // async createShortUrl(body: CreateUrlsDto) {
-    //   try {
-    //     const shortUrl = `https://bu.ex/${generateRandomString()}`;
-    //     const createdUrl = await Url.create({
-    //       original_url: body.original_url,
-    //       short_url: shortUrl,
-    //     });
-    //     return createdUrl;
-    //   } catch (error) {
-    //     throw new Error("No se pudo crear la URL");
-    //   }
-    // }
-    // async findUrlByShortUrl(dto: GetShortenUrlDto) {
-    //   try {
-    //     const urls = await Url.findAll();
-    //     return urls;
-    //   } catch (error) {
-    //     throw new Error("No se pudo obtener las URLS");
-    //   }
-    // }
+    findUrlByShortUrl(dto) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { short_url } = dto;
+                const url = yield url_model_1.default.findOne({
+                    where: {
+                        short_url: short_url,
+                    },
+                });
+                return url === null || url === void 0 ? void 0 : url.dataValues;
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error("No se pudo obtener la URL: " + error);
+            }
+        });
+    }
     deleteUrlById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield url_model_1.default.destroy({

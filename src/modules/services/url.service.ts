@@ -21,6 +21,7 @@ class UrlService {
 
   async findUrlByShortUrl(dto: GetShortenUrlDto) {
     try {
+      
       const { short_url } = dto;
       const url = await Url.findOne({
         where: {

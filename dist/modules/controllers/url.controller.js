@@ -17,36 +17,45 @@ class UrlController {
     shortenUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("req body -----------", req.body);
                 if (!req.body || !req.body.original_url) {
                     return res
                         .status(400)
                         .json({ error: "Cuerpo de la solicitud no válido" });
                 }
                 const url = yield url_service_1.default.createShortUrl(req.body);
+                console.log("req url -----------", url);
                 res.status(201).json(url);
             }
             catch (error) {
+                console.error("Error al crear la URL en la base de datos:", error);
                 res.status(500).json({ error: "Error al acortar la URL" });
             }
         });
     }
-    // async redirectToOriginalUrl(req: any, res: any) {
-    //   try {
-    //     console.log("Veamos que es lo que llega, req.params");
-    //     const url = await urlService.findUrlByShortUrl(req.params);
-    //     if (!url) {
-    //       return res.status(404).json({ error: "URL corta no encontrada" });
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //     res.status(500).json({ error: "Error al obtener la URL original" });
-    //   }
-    // }
+    redirectToOriginalUrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Solicitud de URL corta recibida:", req.params.short_url);
+                const url = yield url_service_1.default.findUrlByShortUrl(req.params);
+                console.log("Veamos que me trae de mi base de datos", url);
+                if (!url) {
+                    return res.status(404).json({ error: "URL corta no encontrada" });
+                }
+                return res.redirect(url.original_url);
+            }
+            catch (error) {
+                console.error(error);
+                res
+                    .status(500)
+                    .json({ error: "Error al obtener la URL original: " + error });
+            }
+        });
+    }
     deleteUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                // Aquí podrías verificar si el usuario tiene permisos para eliminar la URL
                 const deletedUrl = yield url_service_1.default.deleteUrlById(id);
                 if (!deletedUrl) {
                     return res.status(404).json({ error: "URL no encontrada" });
