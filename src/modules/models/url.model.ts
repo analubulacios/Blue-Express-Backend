@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../../database";
 
 const Url = sequelize.define("urls", {
-  id: {
+  url_id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
@@ -24,6 +24,11 @@ const Url = sequelize.define("urls", {
     type: DataTypes.DATE,
     allowNull: true,
   },
+  user_id: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+
 });
 
 export default Url;

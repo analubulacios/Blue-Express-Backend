@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const database_1 = __importDefault(require("../../database"));
 const Url = database_1.default.define("urls", {
-    id: {
+    url_id: {
         type: sequelize_1.DataTypes.UUID,
         defaultValue: sequelize_1.DataTypes.UUIDV4,
         primaryKey: true,
@@ -26,6 +26,10 @@ const Url = database_1.default.define("urls", {
     },
     deletion_date: {
         type: sequelize_1.DataTypes.DATE,
+        allowNull: true,
+    },
+    user_id: {
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true,
     },
 });
