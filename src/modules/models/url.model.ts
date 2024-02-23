@@ -25,12 +25,12 @@ const Url = sequelize.define("urls", {
     allowNull: true,
   },
   user_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
     allowNull: true,
   },
   //se agrega nuevo campo
   request_ip: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
     allowNull: false,
   }
 });

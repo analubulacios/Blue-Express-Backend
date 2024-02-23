@@ -55,7 +55,7 @@ function main() {
             yield database_1.default.authenticate();
             console.log('Conexión establecida correctamente con la base de datos');
             // Sincronizar los modelos con la base de datos
-            yield database_1.default.sync({ force: false });
+            yield database_1.default.sync({ force: true });
             console.log('Modelos sincronizados correctamente con la base de datos');
             app.use("/", index_1.default);
             app.listen(PORT, () => {

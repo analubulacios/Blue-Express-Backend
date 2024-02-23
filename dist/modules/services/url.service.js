@@ -15,13 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const urlGenerator_1 = require("../../utils.ts/urlGenerator");
 const url_model_1 = __importDefault(require("../models/url.model"));
 class UrlService {
-    createShortUrl(body) {
+    createShortUrl(body, request_ip, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const shortUrl = yield (0, urlGenerator_1.generateRandomString)();
                 const createdUrl = yield url_model_1.default.create({
                     original_url: body.original_url,
                     short_url: shortUrl,
+                    request_ip: request_ip,
+                    user_id: user_id,
                 });
                 return createdUrl;
             }

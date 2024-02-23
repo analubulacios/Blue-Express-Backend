@@ -17,18 +17,17 @@ class UrlController {
     shortenUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("req body -----------", req.body);
+                const user_id = req.user ? req.user.id : undefined;
+                const request_ip = req.ip;
                 if (!req.body || !req.body.original_url) {
                     return res
                         .status(400)
                         .json({ error: "Cuerpo de la solicitud no válido" });
                 }
-                const url = yield url_service_1.default.createShortUrl(req.body);
-                console.log("req url -----------", url);
+                const url = yield url_service_1.default.createShortUrl(req.body, request_ip, user_id);
                 res.status(201).json(url);
             }
             catch (error) {
-                console.error("Error al crear la URL en la base de datos:", error);
                 res.status(500).json({ error: "Error al acortar la URL" });
             }
         });

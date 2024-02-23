@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../../database";
 import Url from "./url.model";
 
-const Stats = sequelize.define("url_stats", {
+const Stats = sequelize.define("stats", {
   stats_id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -16,12 +16,8 @@ const Stats = sequelize.define("url_stats", {
     type: DataTypes.DATE,
     allowNull: true,
   },
-  location: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   url_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
     allowNull: true,
   },
 });
