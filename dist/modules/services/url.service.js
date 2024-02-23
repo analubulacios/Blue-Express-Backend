@@ -18,7 +18,7 @@ class UrlService {
     createShortUrl(body) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const shortUrl = `https://short.url/${(0, urlGenerator_1.generateRandomString)()}`;
+                const shortUrl = yield (0, urlGenerator_1.generateRandomString)();
                 const createdUrl = yield url_model_1.default.create({
                     original_url: body.original_url,
                     short_url: shortUrl,

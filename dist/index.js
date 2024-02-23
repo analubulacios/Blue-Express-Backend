@@ -40,7 +40,7 @@ app.use((req, res, next) => {
         next();
     }
 });
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || "";
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
