@@ -36,10 +36,29 @@ class UrlService {
     }
   }
 
+  async getAllUrls() {
+    try {
+      const urls = await Url.findAll({});
+      return urls;
+    } catch (error) {
+      console.error(error);
+      throw new Error("No hay urls ni cortas ni largas " + error);
+    }
+  }
+
   async deleteUrlById(id: any) {
-    return await Url.destroy({
-      where: { id },
-    });
+    try {
+      const url = await Url.findByPk(id);
+
+      if (!url) {
+        throw new Error("URL no encontrada");
+      }
+
+      await url.destroy();
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error al eliminar la URL");
+    }
   }
 }
 

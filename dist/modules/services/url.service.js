@@ -47,11 +47,31 @@ class UrlService {
             }
         });
     }
+    getAllUrls() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const urls = yield url_model_1.default.findAll({});
+                return urls;
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error("No hay urls ni cortas ni largas " + error);
+            }
+        });
+    }
     deleteUrlById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield url_model_1.default.destroy({
-                where: { id },
-            });
+            try {
+                const url = yield url_model_1.default.findByPk(id);
+                if (!url) {
+                    throw new Error("URL no encontrada");
+                }
+                yield url.destroy();
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error("Error al eliminar la URL");
+            }
         });
     }
 }

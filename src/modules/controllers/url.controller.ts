@@ -36,17 +36,25 @@ class UrlController {
     }
   }
 
+  // Funciona
+  async getAllUrlsController(_req: any, res: any) {
+    try {
+      const urls = await urlService.getAllUrls();
+      res.status(200).json(urls);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al obtener las URLs" });
+    }
+  }
+
+  // Funciona
   async deleteUrl(req: any, res: any) {
     try {
       const { id } = req.params;
 
-      const deletedUrl = await urlService.deleteUrlById(id);
+      await urlService.deleteUrlById(id);
 
-      if (!deletedUrl) {
-        return res.status(404).json({ error: "URL no encontrada" });
-      }
-
-      res.status(204).end();
+      res.status(204).send();
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error al eliminar la URL" });

@@ -23,18 +23,26 @@ app.use((0, cors_1.default)());
 app.use((req, res, next) => {
     if (req.method === "POST" || req.method === "DELETE") {
         let data = "";
-        req.on("data", (chunk) => {
-            data += chunk.toString();
-        });
-        req.on("end", () => {
-            try {
-                req.body = JSON.parse(data);
-                next();
-            }
-            catch (error) {
-                res.status(400).json({ error: "Invalid JSON in request body" });
-            }
-        });
+        if (req.readable) {
+            req.on("data", (chunk) => {
+                data += chunk.toString();
+            });
+            req.on("end", () => {
+                try {
+                    // Solo intenta analizar el JSON si hay datos en el cuerpo
+                    if (data) {
+                        req.body = JSON.parse(data);
+                    }
+                    next();
+                }
+                catch (error) {
+                    res.status(400).json({ error: "Invalid JSON in request body" });
+                }
+            });
+        }
+        else {
+            next();
+        }
     }
     else {
         next();

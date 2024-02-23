@@ -52,15 +52,26 @@ class UrlController {
             }
         });
     }
+    // Funciona
+    getAllUrlsController(_req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const urls = yield url_service_1.default.getAllUrls();
+                res.status(200).json(urls);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ error: "Error al obtener las URLs" });
+            }
+        });
+    }
+    // Funciona
     deleteUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const deletedUrl = yield url_service_1.default.deleteUrlById(id);
-                if (!deletedUrl) {
-                    return res.status(404).json({ error: "URL no encontrada" });
-                }
-                res.status(204).end();
+                yield url_service_1.default.deleteUrlById(id);
+                res.status(204).send();
             }
             catch (error) {
                 console.error(error);
