@@ -2,19 +2,22 @@ import urlService from "../services/url.service";
 
 class UrlController {
   async shortenUrl(req: any, res: any) {
+
     try {
-      console.log("req body -----------", req.body);
+   const user_id= req.user ? req.user.id: undefined;
+   const request_ip = req.ip;
+
       if (!req.body || !req.body.original_url) {
         return res
           .status(400)
           .json({ error: "Cuerpo de la solicitud no válido" });
       }
 
-      const url = await urlService.createShortUrl(req.body);
-      console.log("req url -----------", url);
+      const url = await urlService.createShortUrl(req.body, request_ip, user_id);
+      
       res.status(201).json(url);
     } catch (error) {
-      console.error("Error al crear la URL en la base de datos:", error);
+     
       res.status(500).json({ error: "Error al acortar la URL" });
     }
   }

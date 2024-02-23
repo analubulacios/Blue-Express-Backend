@@ -1,4 +1,4 @@
-import { CreateUserDto } from "../dtos/user.dtos";
+import { CreateUserDto } from "../dtos/user.dto";
 import User from "../models/user.model";
 
 class UserService {

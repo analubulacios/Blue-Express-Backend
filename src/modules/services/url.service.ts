@@ -2,15 +2,20 @@ import { generateRandomString } from "../../utils.ts/urlGenerator";
 import { CreateUrlsDto, GetShortenUrlDto } from "../dtos/urls.dto";
 import Url from "../models/url.model";
 
-
 class UrlService {
-  async createShortUrl(body: CreateUrlsDto) {
+  async createShortUrl(
+    body: CreateUrlsDto,
+    request_ip: string,
+    user_id?: string
+  ) {
     try {
       const shortUrl = await generateRandomString();
 
       const createdUrl = await Url.create({
         original_url: body.original_url,
         short_url: shortUrl,
+        request_ip: request_ip,
+        user_id: user_id,
       });
 
       return createdUrl;

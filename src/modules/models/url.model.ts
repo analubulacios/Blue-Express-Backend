@@ -28,6 +28,11 @@ const Url = sequelize.define("urls", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  //se agrega nuevo campo
+  request_ip: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 });
 
 export default Url;
