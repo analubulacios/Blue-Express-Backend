@@ -24,6 +24,9 @@ class UrlService {
     }
   }
 
+// agregar en cada redireccion un + 1 en click
+//buscar metodo incremet (SEQUELIZE) 
+
   async findUrlByShortUrl(dto: GetShortenUrlDto) {
     try {
       
@@ -41,8 +44,6 @@ class UrlService {
       throw new Error("No se pudo obtener la URL: " + error);
     }
   }
-
-  
 
   async getAllUrls() {
     try {

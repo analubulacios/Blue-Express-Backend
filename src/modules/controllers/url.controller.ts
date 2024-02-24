@@ -1,8 +1,8 @@
 import urlService from "../services/url.service";
 
 class UrlController {
+  //comentar ip
   async shortenUrl(req: any, res: any) {
-
     try {
    const user_id= req.user ? req.user.id: undefined;
    const request_ip = req.ip;
@@ -39,7 +39,8 @@ class UrlController {
     }
   }
 
-  // Funciona
+  // MODIFICAR A  by useriD 
+  // HEADER CON JWT
   async getAllUrlsController(_req: any, res: any) {
     try {
       const urls = await urlService.getAllUrls();
@@ -50,7 +51,8 @@ class UrlController {
     }
   }
 
-  // Funciona
+  // HEADER CON JWT 
+  // solo el dueño de la url puede eliminar
   async deleteUrl(req: any, res: any) {
     try {
       const { id } = req.params;

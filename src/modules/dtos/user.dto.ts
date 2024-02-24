@@ -1,4 +1,4 @@
 export type CreateUserDto = {
-    username: string;
+    // username: string;
     email: string;
   };
