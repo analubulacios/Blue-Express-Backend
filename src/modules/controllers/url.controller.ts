@@ -26,7 +26,7 @@ class UrlController {
     try {
      
       const url = await urlService.findUrlByShortUrl(req.params);
-      console.log("Veamos que me trae de mi base de datos", url);
+      
       if (!url) {
         return res.status(404).json({ error: "URL corta no encontrada" });
       }
