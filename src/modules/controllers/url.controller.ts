@@ -27,7 +27,8 @@ class UrlController {
       if (!url) {
         return res.status(404).json({ error: "URL corta no encontrada" });
       }
-      return res.send(url.original_url);
+
+      return res.send(url);
     } catch (error) {
       console.error(error);
       res
@@ -37,10 +38,12 @@ class UrlController {
   }
 
   // MODIFICAR A  by useriD 
-  // HEADER CON JWT
-  async getAllUrlsController(_req: any, res: any) {
+  // HEADER CON JWT hay que cambiar porque hay que mandar el token 
+  async getAllUrlsController(req: any, res: any) {
     try {
-      const urls = await urlService.getAllUrls();
+      console.log("00000000000", req.user)
+      const user_id = req.user
+      const urls = await urlService.getAllUrls(user_id);
       res.status(200).json(urls);
     } catch (error) {
       console.error(error);

@@ -5,7 +5,6 @@ import Url from "../models/url.model";
 class UrlService {
   async createShortUrl(
     body: CreateUrlsDto,
-    request_ip: string,
     user_id?: string
   ) {
     try {
@@ -14,40 +13,43 @@ class UrlService {
       const createdUrl = await Url.create({
         original_url: body.original_url,
         short_url: shortUrl,
-        request_ip: request_ip,
+        clicks: 0,
         user_id: user_id,
       });
 
       return createdUrl;
     } catch (error) {
+      console.error(error)
       throw new Error("No se pudo crear la URL");
     }
   }
 
-// agregar en cada redireccion un + 1 en click
-//buscar metodo incremet (SEQUELIZE) 
-
   async findUrlByShortUrl(dto: GetShortenUrlDto) {
     try {
-      
       const { short_url } = dto;
-      const url = await Url.findOne({
-        where: {
-          short_url: short_url,
-        },
+      let url = await Url.findOne({
+          where: {
+              short_url: short_url,
+          },
       });
 
-
-      return url?.dataValues;
+    if (url) {
+      await url.increment('clicks', { by: 1 });
+  }
+      return url?.dataValues.original_url;
     } catch (error) {
       console.error(error);
       throw new Error("No se pudo obtener la URL: " + error);
     }
   }
 
-  async getAllUrls() {
+  async getAllUrls(user_id: string) {
     try {
-      const urls = await Url.findAll({});
+      const urls = await Url.findAll({
+        where: {
+          user_id: user_id,
+        },
+      });
       return urls;
     } catch (error) {
       console.error(error);

@@ -7,7 +7,8 @@ export function generateToken(userId: string): string {
   const payload = {
       userId: userId
   };
-  const token = jwt.sign(payload, secretKey);
+  const expiresIn = 7 * 24 * 60 * 60;
+  const token = jwt.sign(payload, secretKey, { expiresIn });
   return token;
 }
 

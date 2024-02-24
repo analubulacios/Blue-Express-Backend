@@ -31,6 +31,7 @@ const Url = sequelize.define("urls", {
    clicks: {
      type: DataTypes.INTEGER,
      allowNull: false,
+     defaultValue: 0,
    }
 });
 
