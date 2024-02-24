@@ -45,7 +45,7 @@ async function main() {
     console.log('Conexión establecida correctamente con la base de datos');
 
     // Sincronizar los modelos con la base de datos
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     console.log('Modelos sincronizados correctamente con la base de datos');
     app.use("/", Routes);
 

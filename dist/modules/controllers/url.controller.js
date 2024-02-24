@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const url_service_1 = __importDefault(require("../services/url.service"));
 class UrlController {
+    //comentar ip
     shortenUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -35,13 +36,11 @@ class UrlController {
     redirectToOriginalUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("Solicitud de URL corta recibida:", req.params.short_url);
                 const url = yield url_service_1.default.findUrlByShortUrl(req.params);
-                console.log("Veamos que me trae de mi base de datos", url);
                 if (!url) {
                     return res.status(404).json({ error: "URL corta no encontrada" });
                 }
-                return res.redirect(url.original_url);
+                return res.send(url.original_url);
             }
             catch (error) {
                 console.error(error);
@@ -51,7 +50,8 @@ class UrlController {
             }
         });
     }
-    // Funciona
+    // MODIFICAR A  by useriD 
+    // HEADER CON JWT
     getAllUrlsController(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -64,7 +64,8 @@ class UrlController {
             }
         });
     }
-    // Funciona
+    // HEADER CON JWT 
+    // solo el dueño de la url puede eliminar
     deleteUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

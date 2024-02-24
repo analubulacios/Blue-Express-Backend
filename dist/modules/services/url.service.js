@@ -32,6 +32,8 @@ class UrlService {
             }
         });
     }
+    // agregar en cada redireccion un + 1 en click
+    //buscar metodo incremet (SEQUELIZE) 
     findUrlByShortUrl(dto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
