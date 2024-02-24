@@ -24,7 +24,6 @@ class UrlController {
 
   async redirectToOriginalUrl(req: any, res: any) {
     try {
-     
       const url = await urlService.findUrlByShortUrl(req.params);
       
       if (!url) {
