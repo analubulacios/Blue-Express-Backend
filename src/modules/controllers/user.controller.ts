@@ -1,14 +1,19 @@
-import userService from "../services/user.service";
+import User from "../models/user.model";
+import { generateToken } from "../../utils.ts/generateToken";
 
 class UserController {
   async createUser(req: any, res: any) {
     try {
-      const user = await userService.createUser(req.body);
-      res.status(201).json(user);
-      //ademas debe hacer un send.token(dentro del json)
-      //la data que debo tokenizar es el userId. 
+      const [user, created] = await User.findOrCreate({ where: { email: req.body.email } });
+      
+      const token = generateToken(user.getDataValue("userId"));
+      
+      return res.status(created ? 201 : 200).json({
+        user,
+        token: token
+      });
     } catch (error) {
-      res.status(500).json({ error: "No pudimos crear el usuario" });
+      return res.status(500).json({ error: "No pudimos crear el usuario" });
     }
   }
 }

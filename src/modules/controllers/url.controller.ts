@@ -1,11 +1,9 @@
 import urlService from "../services/url.service";
 
 class UrlController {
-  //comentar ip
   async shortenUrl(req: any, res: any) {
     try {
    const user_id= req.user ? req.user.id: undefined;
-   const request_ip = req.ip;
 
       if (!req.body || !req.body.original_url) {
         return res
@@ -13,7 +11,7 @@ class UrlController {
           .json({ error: "Cuerpo de la solicitud no válido" });
       }
 
-      const url = await urlService.createShortUrl(req.body, request_ip, user_id);
+      const url = await urlService.createShortUrl(req.body, user_id);
       
       res.status(201).json(url);
     } catch (error) {
