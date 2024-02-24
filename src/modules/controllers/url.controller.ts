@@ -24,13 +24,13 @@ class UrlController {
 
   async redirectToOriginalUrl(req: any, res: any) {
     try {
-      console.log("Solicitud de URL corta recibida:", req.params.short_url);
+     
       const url = await urlService.findUrlByShortUrl(req.params);
       console.log("Veamos que me trae de mi base de datos", url);
       if (!url) {
         return res.status(404).json({ error: "URL corta no encontrada" });
       }
-      return res.redirect(url.original_url);
+      return res.send(url.original_url);
     } catch (error) {
       console.error(error);
       res

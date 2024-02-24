@@ -34,12 +34,15 @@ class UrlService {
         },
       });
 
+
       return url?.dataValues;
     } catch (error) {
       console.error(error);
       throw new Error("No se pudo obtener la URL: " + error);
     }
   }
+
+  
 
   async getAllUrls() {
     try {
