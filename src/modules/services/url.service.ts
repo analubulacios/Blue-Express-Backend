@@ -8,13 +8,17 @@ class UrlService {
     user_id?: string,
   ) {
     try {
-      //Esto me mide el tiempo de devolucion de la url corta
-     // const startTime = new Date().getTime(); // Captura el tiempo de inicio
 
-     // const endTime = new Date().getTime(); // Captura el tiempo de finalización
-     // const elapsedTimeInSeconds = (endTime - startTime) / 1000; // Calcula el tiempo transcurrido en segundos
+     // This measures the time taken for URL shortening
+     // const startTime = new Date().getTime(); // Captures the start time
 
-     // console.log(`La URL corta se generó en ${elapsedTimeInSeconds} segundos.`);
+     // Your code for URL shortening goes here
+
+     // const endTime = new Date().getTime(); // Captures the end time
+     // const elapsedTimeInSeconds = (endTime - startTime) / 1000; // Calculates the elapsed time in seconds
+
+     // console.log(`The short URL was generated in ${elapsedTimeInSeconds} seconds.`);
+
 
       const shortUrl = await generateRandomString(process.env.DOMAIN);
 
