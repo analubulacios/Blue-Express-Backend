@@ -1,42 +1,42 @@
-import { Response } from 'express';
-import moment from 'moment';
-import * as jwt from 'jsonwebtoken';
+import { RequestHandler, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { SessionDecodedToken } from '../utils.ts/generateToken';
+
 import 'dotenv/config';
 
-export const auth = async (req: any, _res: Response, next: any) => {
+export const auth: RequestHandler = async (req: any, res: Response, next) => {
   try {
-    const token1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDg3ODYwOTQsImV4cCI6MTcwOTM5MDg5NH0.o2Sw-IKVdTGAtPKGU7Rs0rjhYTNWTgOsZ1fUJPJiBj0";
-
-    const [, payloadEncoded] = token1.split('.');
-    const payload = JSON.parse(Buffer.from(payloadEncoded, 'base64').toString());
-    
-    console.log("Payload:", payload);
-    
-    const userId = payload.sub;
-    console.log("User ID:", userId);
-    console.log("process.env.JWT_SECRET:", process.env.JWT_SECRET);
-    const jwtoken = process.env.JWT_SECRET || "";
-    if (!req.headers.authorization) {
-      throw Error('Request does not have the authentication header');
+    const { userId } = decodeUserId(req)
+    if(!userId) {
+      throw new Error()
     }
-    const Authorization: any = req.headers.authorization;
-    console.log("Authorization:", Authorization);
-    const token: any = Authorization.split(' ')[1];
-    console.log("token:", token);
-    try {
-      // hay que ver porque no lee el token
-      const payload: any = jwt.verify(token, jwtoken);
-      console.log("Decodificado:", payload);
-      if (payload.exp <= moment().unix()) {
-        throw Error('Token has been expired');
-      }
-      console.log("Decodificado:", payload);
-      req.user = payload;
-      next();
-    } catch (e) {
-      throw Error('Token not valid');
-    }
-  } catch (error) {
-    next(error);
+    req.userId = userId
+    next();
+  } catch (err) {
+    res.status(401).send('Please authenticate');
   }
 };
+
+export function decodeUserId(req: any): SessionDecodedToken {
+  const secret = process.env.JWT_SECRET as string 
+  const token = parseBearer(req.header('Authorization'))
+
+  if(!token) {
+    return {};
+  }
+  return jwt.verify(token, secret) as SessionDecodedToken;
+}
+
+function parseBearer(string: string) {
+  if(!string) return;
+  const parts = string.split(' ');
+  if (parts.length === 2) {
+    var scheme = parts[0];
+    var credentials = parts[1];
+ 
+    if (/^Bearer$/i.test(scheme)) {
+      return credentials
+    }
+  }
+  return;
+}

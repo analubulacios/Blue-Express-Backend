@@ -9,7 +9,7 @@ router.post("/shorten", urlController.shortenUrl);
 
 router.get("/all_urls", auth, urlController.getAllUrlsController);
 
-router.get("/:short_url", auth, urlController.redirectToOriginalUrl);
+router.get("/:short_url", urlController.redirectToOriginalUrl);
 
 router.delete("/:id", auth, urlController.deleteUrl);
 

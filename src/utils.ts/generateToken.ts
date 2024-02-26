@@ -1,14 +1,16 @@
-import * as jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+
+export type SessionDecodedToken = {
+  userId?: string
+}
 
 export function generateToken(userId: string): string {
-  const secretKey = crypto.randomBytes(32).toString('hex');
+  const secret = process.env.JWT_SECRET as string
 
-  const payload = {
-      userId: userId
+  const payload: SessionDecodedToken = {
+    userId: userId
   };
-  const expiresIn = 7 * 24 * 60 * 60;
-  const token = jwt.sign(payload, secretKey, { expiresIn });
+  const token = jwt.sign(payload, secret);
   return token;
 }
 
