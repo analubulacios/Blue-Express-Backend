@@ -17,10 +17,3 @@ const sequelize = new sequelize_typescript_1.Sequelize(database, username, passw
     port: parseInt(port, 10),
 });
 exports.default = sequelize;
-// import { Sequelize } from 'sequelize';
-// // Configuración de la conexión a la base de datos
-// const sequelize = new Sequelize('blueexpress', 'postgres', '1987', {
-//   host: '127.0.0.1',
-//   dialect: 'postgres',
-// });
-// export default sequelize;

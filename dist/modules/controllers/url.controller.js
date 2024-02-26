@@ -12,23 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth_1 = require("../../middlewares/auth");
 const url_service_1 = __importDefault(require("../services/url.service"));
 class UrlController {
-    //comentar ip
     shortenUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user_id = req.user ? req.user.id : undefined;
-                const request_ip = req.ip;
+                const user = (0, auth_1.decodeUserId)(req);
+                const userId = user.userId;
                 if (!req.body || !req.body.original_url) {
                     return res
                         .status(400)
                         .json({ error: "Cuerpo de la solicitud no válido" });
                 }
-                const url = yield url_service_1.default.createShortUrl(req.body, request_ip, user_id);
+                const url = yield url_service_1.default.createShortUrl(req.body, userId);
                 res.status(201).json(url);
             }
             catch (error) {
+                console.log(error);
                 res.status(500).json({ error: "Error al acortar la URL" });
             }
         });
@@ -40,7 +41,7 @@ class UrlController {
                 if (!url) {
                     return res.status(404).json({ error: "URL corta no encontrada" });
                 }
-                return res.send(url.original_url);
+                return res.send(url);
             }
             catch (error) {
                 console.error(error);
@@ -50,12 +51,11 @@ class UrlController {
             }
         });
     }
-    // MODIFICAR A  by useriD 
-    // HEADER CON JWT
-    getAllUrlsController(_req, res) {
+    getAllUrlsController(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const urls = yield url_service_1.default.getAllUrls();
+                const { userId } = req;
+                const urls = yield url_service_1.default.getAllUrls(userId);
                 res.status(200).json(urls);
             }
             catch (error) {
@@ -64,8 +64,6 @@ class UrlController {
             }
         });
     }
-    // HEADER CON JWT 
-    // solo el dueño de la url puede eliminar
     deleteUrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

@@ -15,35 +15,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const urlGenerator_1 = require("../../utils.ts/urlGenerator");
 const url_model_1 = __importDefault(require("../models/url.model"));
 class UrlService {
-    createShortUrl(body, request_ip, user_id) {
+    createShortUrl(body, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const shortUrl = yield (0, urlGenerator_1.generateRandomString)();
                 const createdUrl = yield url_model_1.default.create({
                     original_url: body.original_url,
                     short_url: shortUrl,
-                    request_ip: request_ip,
+                    clicks: 0,
                     user_id: user_id,
                 });
                 return createdUrl;
             }
             catch (error) {
+                console.error(error);
                 throw new Error("No se pudo crear la URL");
             }
         });
     }
-    // agregar en cada redireccion un + 1 en click
-    //buscar metodo incremet (SEQUELIZE) 
     findUrlByShortUrl(dto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { short_url } = dto;
-                const url = yield url_model_1.default.findOne({
+                let url = yield url_model_1.default.findOne({
                     where: {
                         short_url: short_url,
                     },
                 });
-                return url === null || url === void 0 ? void 0 : url.dataValues;
+                if (url) {
+                    yield url.increment('clicks', { by: 1 });
+                }
+                return url === null || url === void 0 ? void 0 : url.dataValues.original_url;
             }
             catch (error) {
                 console.error(error);
@@ -51,10 +53,15 @@ class UrlService {
             }
         });
     }
-    getAllUrls() {
+    getAllUrls(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const urls = yield url_model_1.default.findAll({});
+                const urls = yield url_model_1.default.findAll({
+                    where: {
+                        user_id,
+                        // deletion_date: null
+                    },
+                });
                 return urls;
             }
             catch (error) {

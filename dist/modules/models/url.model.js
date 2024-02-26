@@ -32,11 +32,10 @@ const Url = database_1.default.define("urls", {
         type: sequelize_1.DataTypes.UUID,
         allowNull: true,
     },
-    //agregar clicks !!!
-    //se agrega nuevo campo
-    // request_ip: {
-    //   type: DataTypes.UUID,
-    //   allowNull: false,
-    // }
+    clicks: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+    }
 });
 exports.default = Url;
