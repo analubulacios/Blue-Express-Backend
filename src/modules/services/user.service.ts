@@ -11,7 +11,7 @@ async createUser(body: CreateUserDto) {
       
       return [user, created];
     } catch (error) {
-      throw error;
+      throw new Error("Could not create user");
     }
   }
 }

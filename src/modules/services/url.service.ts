@@ -5,10 +5,18 @@ import Url from "../models/url.model";
 class UrlService {
   async createShortUrl(
     body: CreateUrlsDto,
-    user_id?: string
+    user_id?: string,
   ) {
     try {
-      const shortUrl = await generateRandomString();
+      //Esto me mide el tiempo de devolucion de la url corta
+     // const startTime = new Date().getTime(); // Captura el tiempo de inicio
+
+     // const endTime = new Date().getTime(); // Captura el tiempo de finalización
+     // const elapsedTimeInSeconds = (endTime - startTime) / 1000; // Calcula el tiempo transcurrido en segundos
+
+     // console.log(`La URL corta se generó en ${elapsedTimeInSeconds} segundos.`);
+
+      const shortUrl = await generateRandomString(process.env.DOMAIN);
 
       const createdUrl = await Url.create({
         original_url: body.original_url,
@@ -19,8 +27,7 @@ class UrlService {
 
       return createdUrl;
     } catch (error) {
-      console.error(error)
-      throw new Error("No se pudo crear la URL");
+      throw new Error("Could not create URL");
     }
   }
 
@@ -33,13 +40,16 @@ class UrlService {
           },
       });
 
+      if (!url) {
+        throw new Error("URL not found in the database.");
+    }
+
     if (url) {
       await url.increment('clicks', { by: 1 });
   }
       return url?.dataValues.original_url;
     } catch (error) {
-      console.error(error);
-      throw new Error("No se pudo obtener la URL: " + error);
+      throw new Error("Could not get URL:" + error);
     }
   }
 
@@ -48,13 +58,16 @@ class UrlService {
       const urls = await Url.findAll({
         where: {
           user_id,
-          // deletion_date: null
         },
       });
+
+      if (urls.length === 0) {
+        throw new Error("No URLs were found for the given user.");
+    }
+
       return urls;
     } catch (error) {
-      console.error(error);
-      throw new Error("No hay urls ni cortas ni largas " + error);
+      throw new Error("There are no short or long urls" + error);
     }
   }
 
@@ -63,13 +76,12 @@ class UrlService {
       const url = await Url.findByPk(id);
 
       if (!url) {
-        throw new Error("URL no encontrada");
+        throw new Error("URL not found");
       }
 
       await url.destroy();
     } catch (error) {
-      console.error(error);
-      throw new Error("Error al eliminar la URL");
+      throw new Error("Error deleting URL");
     }
   }
 }

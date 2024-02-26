@@ -17,7 +17,6 @@ class UrlController {
       
       res.status(201).json(url);
     } catch (error) {
-      console.log(error)
       res.status(500).json({ error: "Error al acortar la URL" });
     }
   }

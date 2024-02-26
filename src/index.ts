@@ -20,7 +20,6 @@ app.use((req, res, next) => {
 
       req.on("end", () => {
         try {
-          // Solo intenta analizar el JSON si hay datos en el cuerpo
           if (data) {
             req.body = JSON.parse(data);
           }
@@ -42,15 +41,12 @@ const PORT = process.env.PORT || "";
 async function main() {
   try {
     await sequelize.authenticate();
-    console.log('Conexión establecida correctamente con la base de datos');
 
-    // Sincronizar los modelos con la base de datos
+// Synchronize the models with the database
     await sequelize.sync({ force: false });
-    console.log('Modelos sincronizados correctamente con la base de datos');
     app.use("/", Routes);
 
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
     console.error("No se pudo conectar con el servidor");
