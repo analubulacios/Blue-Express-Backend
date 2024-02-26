@@ -1,9 +1,11 @@
+import { decodeUserId } from "../../middlewares/auth";
 import urlService from "../services/url.service";
 
 class UrlController {
   async shortenUrl(req: any, res: any) {
     try {
-   const user_id= req.user ? req.user.id: undefined;
+      const user = decodeUserId(req)
+      const userId = user.userId
 
       if (!req.body || !req.body.original_url) {
         return res
@@ -11,11 +13,11 @@ class UrlController {
           .json({ error: "Cuerpo de la solicitud no válido" });
       }
 
-      const url = await urlService.createShortUrl(req.body, user_id);
+      const url = await urlService.createShortUrl(req.body, userId);
       
       res.status(201).json(url);
     } catch (error) {
-     
+      console.log(error)
       res.status(500).json({ error: "Error al acortar la URL" });
     }
   }
@@ -37,13 +39,11 @@ class UrlController {
     }
   }
 
-  // MODIFICAR A  by useriD 
-  // HEADER CON JWT hay que cambiar porque hay que mandar el token 
+
   async getAllUrlsController(req: any, res: any) {
     try {
-      console.log("00000000000", req.user)
-      const user_id = req.user
-      const urls = await urlService.getAllUrls(user_id);
+      const { userId } = req
+      const urls = await urlService.getAllUrls(userId);
       res.status(200).json(urls);
     } catch (error) {
       console.error(error);
@@ -51,8 +51,7 @@ class UrlController {
     }
   }
 
-  // HEADER CON JWT 
-  // solo el dueño de la url puede eliminar
+
   async deleteUrl(req: any, res: any) {
     try {
       const { id } = req.params;

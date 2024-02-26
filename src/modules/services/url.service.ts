@@ -47,7 +47,8 @@ class UrlService {
     try {
       const urls = await Url.findAll({
         where: {
-          user_id: user_id,
+          user_id,
+          // deletion_date: null
         },
       });
       return urls;
