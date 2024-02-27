@@ -24,7 +24,7 @@ class UserController {
       const token = generateToken(userId);
       return res.status(created ? 201 : 200).json({userId, token});
     } catch (error) {
-      return res.status(500).json({ error: "No pudimos crear el usuario" });
+      return res.status(500).json({ error: "We could not create the user" });
     }
   }
 }
