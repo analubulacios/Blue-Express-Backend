@@ -16,12 +16,13 @@ exports.generateRandomString = void 0;
 const nanoid_1 = require("nanoid");
 const url_model_1 = __importDefault(require("../modules/models/url.model"));
 const nanoid = (0, nanoid_1.customAlphabet)("abcdefghkmnpqrstuvwxyzABCDEFGHKLMNPQRSTUVWXYZ23456789", 5);
-function generateRandomString() {
+function generateRandomString(domain) {
     return __awaiter(this, void 0, void 0, function* () {
         const shortUrl = nanoid();
+        const completeShortUrl = domain ? `${domain}/${shortUrl}` : shortUrl;
         const searchDb = yield url_model_1.default.findOne({
             where: {
-                short_url: shortUrl,
+                short_url: completeShortUrl,
             },
         });
         if (!searchDb) {

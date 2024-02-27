@@ -18,7 +18,13 @@ class UrlService {
     createShortUrl(body, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const shortUrl = yield (0, urlGenerator_1.generateRandomString)();
+                // This measures the time taken for URL shortening
+                // const startTime = new Date().getTime(); // Captures the start time
+                // Your code for URL shortening goes here
+                // const endTime = new Date().getTime(); // Captures the end time
+                // const elapsedTimeInSeconds = (endTime - startTime) / 1000; // Calculates the elapsed time in seconds
+                // console.log(`The short URL was generated in ${elapsedTimeInSeconds} seconds.`);
+                const shortUrl = yield (0, urlGenerator_1.generateRandomString)(process.env.DOMAIN);
                 const createdUrl = yield url_model_1.default.create({
                     original_url: body.original_url,
                     short_url: shortUrl,
@@ -28,8 +34,7 @@ class UrlService {
                 return createdUrl;
             }
             catch (error) {
-                console.error(error);
-                throw new Error("No se pudo crear la URL");
+                throw new Error("Could not create URL");
             }
         });
     }
@@ -42,14 +47,16 @@ class UrlService {
                         short_url: short_url,
                     },
                 });
+                if (!url) {
+                    throw new Error("URL not found in the database.");
+                }
                 if (url) {
                     yield url.increment('clicks', { by: 1 });
                 }
                 return url === null || url === void 0 ? void 0 : url.dataValues.original_url;
             }
             catch (error) {
-                console.error(error);
-                throw new Error("No se pudo obtener la URL: " + error);
+                throw new Error("Could not get URL:" + error);
             }
         });
     }
@@ -59,14 +66,15 @@ class UrlService {
                 const urls = yield url_model_1.default.findAll({
                     where: {
                         user_id,
-                        // deletion_date: null
                     },
                 });
+                if (urls.length === 0) {
+                    throw new Error("No URLs were found for the given user.");
+                }
                 return urls;
             }
             catch (error) {
-                console.error(error);
-                throw new Error("No hay urls ni cortas ni largas " + error);
+                throw new Error("There are no short or long urls" + error);
             }
         });
     }
@@ -75,13 +83,12 @@ class UrlService {
             try {
                 const url = yield url_model_1.default.findByPk(id);
                 if (!url) {
-                    throw new Error("URL no encontrada");
+                    throw new Error("URL not found");
                 }
                 yield url.destroy();
             }
             catch (error) {
-                console.error(error);
-                throw new Error("Error al eliminar la URL");
+                throw new Error("Error deleting URL");
             }
         });
     }

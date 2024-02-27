@@ -9,17 +9,6 @@ class UrlService {
   ) {
     try {
 
-     // This measures the time taken for URL shortening
-     // const startTime = new Date().getTime(); // Captures the start time
-
-     // Your code for URL shortening goes here
-
-     // const endTime = new Date().getTime(); // Captures the end time
-     // const elapsedTimeInSeconds = (endTime - startTime) / 1000; // Calculates the elapsed time in seconds
-
-     // console.log(`The short URL was generated in ${elapsedTimeInSeconds} seconds.`);
-
-
       const shortUrl = await generateRandomString(process.env.DOMAIN);
 
       const createdUrl = await Url.create({

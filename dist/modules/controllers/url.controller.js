@@ -23,14 +23,13 @@ class UrlController {
                 if (!req.body || !req.body.original_url) {
                     return res
                         .status(400)
-                        .json({ error: "Cuerpo de la solicitud no válido" });
+                        .json({ error: "Invalid request body" });
                 }
                 const url = yield url_service_1.default.createShortUrl(req.body, userId);
                 res.status(201).json(url);
             }
             catch (error) {
-                console.log(error);
-                res.status(500).json({ error: "Error al acortar la URL" });
+                res.status(500).json({ error: "Error while shortening the URL" });
             }
         });
     }

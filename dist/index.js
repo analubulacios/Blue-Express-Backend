@@ -29,7 +29,6 @@ app.use((req, res, next) => {
             });
             req.on("end", () => {
                 try {
-                    // Solo intenta analizar el JSON si hay datos en el cuerpo
                     if (data) {
                         req.body = JSON.parse(data);
                     }
@@ -53,13 +52,10 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield database_1.default.authenticate();
-            console.log('Conexión establecida correctamente con la base de datos');
-            // Sincronizar los modelos con la base de datos
+            // Synchronize the models with the database
             yield database_1.default.sync({ force: false });
-            console.log('Modelos sincronizados correctamente con la base de datos');
             app.use("/", index_1.default);
             app.listen(PORT, () => {
-                console.log(`Server running on port ${PORT}`);
             });
         }
         catch (error) {
