@@ -40,14 +40,19 @@ const PORT = process.env.PORT || 3000;
 
 async function main() {
   try {
+    if (!process.env.DATABASE_URL) {
+      console.warn("ADVERTENCIA: No se ha especificado una base de datos. El servidor continuará ejecutándose sin conexión a la base de datos.");
+    } else {
     await sequelize.authenticate();
 
 // Synchronize the models with the database
     await sequelize.sync({ force: false });
+  } 
     app.use("/", Routes);
 
     app.listen(PORT, () => {
     });
+
   } catch (error) {
     console.error("No se pudo conectar con el servidor", error);
   }
