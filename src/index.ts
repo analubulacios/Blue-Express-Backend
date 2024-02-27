@@ -36,7 +36,7 @@ app.use((req, res, next) => {
   }
 });
 
-const PORT = process.env.PORT || ""; 
+const PORT = process.env.PORT || 3000; 
 
 async function main() {
   try {
@@ -49,7 +49,7 @@ async function main() {
     app.listen(PORT, () => {
     });
   } catch (error) {
-    console.error("No se pudo conectar con el servidor");
+    console.error("No se pudo conectar con el servidor", error);
   }
 }
 
