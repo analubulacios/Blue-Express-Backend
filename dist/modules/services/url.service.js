@@ -18,12 +18,6 @@ class UrlService {
     createShortUrl(body, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // This measures the time taken for URL shortening
-                // const startTime = new Date().getTime(); // Captures the start time
-                // Your code for URL shortening goes here
-                // const endTime = new Date().getTime(); // Captures the end time
-                // const elapsedTimeInSeconds = (endTime - startTime) / 1000; // Calculates the elapsed time in seconds
-                // console.log(`The short URL was generated in ${elapsedTimeInSeconds} seconds.`);
                 const shortUrl = yield (0, urlGenerator_1.generateRandomString)(process.env.DOMAIN);
                 const createdUrl = yield url_model_1.default.create({
                     original_url: body.original_url,
